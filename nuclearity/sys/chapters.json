@@ -1,0 +1,18 @@
+{
+  "Prologue": {
+    "title": "Prologue",
+    "content": "This is the content of chapter 1.",
+    "background": "source\\background\\chapter1.jpg",
+    "bg_filler": "None",
+    "speeches": [
+      {
+        "speaker": ["Mr.", "Johnson"],
+        "text": "This is the first speech in chapter 1.\nMultiline test."
+      },
+      {
+        "speaker": ["Mrs.", "Smith"],
+        "text": "This is the second speech in chapter 1. Auto multiline test with many symbols that will not fit in 1 line so they must wrap to the bottom line again and again. IF U SEE THIS TEXT, IT'S WORKING!"
+      }
+    ]
+  }
+}

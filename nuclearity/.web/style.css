@@ -1,0 +1,30 @@
+body {
+    position: relative;
+    overflow: hidden;
+    background-image: "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg";
+}
+
+.vhs-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.2);
+    filter: blur(2px) contrast(120%) saturate(150%);
+    /*animation: flicker 0.05s infinite alternate;*/
+    animation: noise 0.1s infinite;
+
+    z-index: 1000;
+}
+
+@keyframes noise {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(2px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes flicker {
+    0% { opacity: 0.8; }
+    100% { opacity: 0.5; }
+}

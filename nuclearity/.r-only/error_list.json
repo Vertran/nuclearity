@@ -1,0 +1,6 @@
+{
+    "uuu": "Fatal error (unknown)",
+    "000": "No problems found!",
+    "001": "Some files missing.. Saving progress & restoring!",
+    "001n": "Some files missing.. Can't restore.. Exporting progress. Reinstall app."
+}
