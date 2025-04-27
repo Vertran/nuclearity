@@ -1,6 +1,4 @@
-import time, pygame
-
-pygame.init()
+import time
 
 log_path = r"c:\Users\justv\OneDrive\Рабочий стол\nuclearity\sys\log.txt"
 
@@ -15,7 +13,6 @@ def make_log(level="DEBUG", message="Debug", description=None, timestamp=None):
     if level in ['WARN', 'ERROR', 'FATAL']:
         if Warn.amount >= Warn.max:
             make_log('EXIT', f'Total error number reached: {Warn.amount}')
-            pygame.quit()
         Warn.amount += 1
     if description:
         log_entry += f" - {description}"

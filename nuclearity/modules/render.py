@@ -1,45 +1,27 @@
-import pygame, time
+import glfw
 from data_exch import *
 from logger import make_log
-
-pygame.init()
+from objects import Filler, Button, Label, ScrollField
 
 def in_menus():
     return shared_data["menu"] in ['main_menu', 'settings']
 
 def main():
-    #while shared_data["window"] is None:
-    #    time.sleep(0.01)
 
-    #screen = shared_data["window"]
+    if not glfw.init():
+        make_log("ERROR", "GLFW initialization failed")
+        return
 
-    screen = pygame.display.set_mode(shared_data["screen"][:2], shared_data["screen"][2])
-    pygame.display.set_caption("NUCLEARITY")
-    shared_data["window"] = screen
-
-
+    window = glfw.create_window(*shared_data["screen"], "NUCLEARITY")
+    glfw.make_context_current(window)
+    if not window:
+        make_log("ERROR", "Window creation failed")
+        glfw.terminate()
+        return
     
     while shared_data["run"][0]:
         if shared_data["run"][1]:
-
-            shared_data["events"] = pygame.event.get()
-
-            for event in shared_data["events"]:
-                if event.type == pygame.QUIT:
-                    shared_data["run"] = [False, False]
-                    make_log("INFO", "Exited app")
-
-
-            if in_menus() or shared_data["menu"] == "None":
-                #screen.fill((0, 0, 0))
-
-                for element in shared_data["draw_q"]:
-                    element.draw(screen)
-
-            else:
-                pass
-            pygame.display.update()
-
-    pygame.quit()
+            glfw.poll_events()
+            glfw.swap_buffers(window)
 
 make_log("INFO", "RenderEngine started successfully")

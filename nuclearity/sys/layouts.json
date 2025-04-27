@@ -1,120 +1,15 @@
 {
-    "main_menu":[
-        {
-            "type":"filler",
-            "rect": [960,540,1920,1080],
-            "color": [20,20,20]
-        },
-        {
-            "type":"label",
-            "text":"NUCLEARITY",
-            "font":"Arial",
-            "size": 100,
-            "text_color":[255,255,255],
-            "pos":[980,250]
-        },
-        {
-            "type":"button",
-            "action":"start_game",
-            "text":"Play",
-            "font":"Arial",
-            "rect":[960,600,200,75],
-            "color":[100,60,90],
-            "outline":[100,60,90],
-            "hover_color":[50,10,40],
-            "text_color":[255,255,255]
-        },
-        {
-            "type":"button",
-            "action":"settings",
-            "text":"Settings",
-            "font":"Arial",
-            "rect":[960,700,200,75],
-            "color":[100,60,90],
-            "outline":[100,60,90],
-            "hover_color":[50,10,40],
-            "text_color":[255,255,255]
-        },
-        {
-            "type":"button",
-            "action":"exit",
-            "text":"Exit",
-            "font":"Arial",
-            "rect":[960,800,200,75],
-            "color":[110,60,80],
-            "outline":[110,60,80],
-            "hover_color":[60,10,30],
-            "text_color":[255,255,255]
-        }
-    ],
-    "settings":[
-        {
-            "type":"filler",
-            "rect": [960,540,1920,1080],
-            "color": [50,50,50]
-        },
-        {
-            "type":"filler",
-            "rect": [160,540,200,965],
-            "color": [0,0,0,20]
-        },
-        {
-            "type":"scroll-field",
-            "rect":[960,540,1800,965],
-            "color":[0,0,0,20],
-            "highlight":[20,20,20,40],
-            "menus":{
-                "game":{
-                    "name":"Game",
-                    "action":"settings.game",
-                    "content":[
-                        {
-                            "label":"None",
-                            "type":"checkbox",
-                            "destination":"None",
-                            "rect":[960,540,940,50],
-                            "color":[0,0,0,20]
-                        },
-                        {
-                            "label":"None",
-                            "type":"checkbox",
-                            "destination":"None",
-                            "rect":[960,570,940,50],
-                            "color":[0,0,0,20]
-                        }
-                    ]
-                },
-                "controls":{
-                    "name":"Controls",
-                    "action":"settings.controls"
-                },
-                "graphics":{
-                    "name":"Graphics",
-                    "action":"settings.graphics",
-                    "content":[
-                        {
-                            "label":"None",
-                            "type":"checkbox",
-                            "destination":"None"
-                        }
-                    ]
-                },
-                "sound":{
-                    "name":"Sound",
-                    "action":"settings.sound"
-                }
-            }
-        },
-        {
-            "type":"button",
-            "action":"back",
-            "text":"<-",
-            "font":"Arial",
-            "rect":[30,30,50,50],
-            "color":[110,60,80],
-            "outline":[110,60,80],
-            "hover_color":[60,10,30],
-            "text_color":[255,255,255]
-        }
+    "main_menu": [
+      {
+        "type": "button",
+        "text": "Start Game",
+        "rect": [960, 300, 200, 80],
+        "color": [180, 180, 180],
+        "hover_color": [220, 220, 220],
+        "outline": [100, 100, 100],
+        "text_color": [0, 0, 0],
+        "action": "start_game"
+      }
     ]
-}
+  }
+  
