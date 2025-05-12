@@ -1,6 +1,6 @@
 import time
 
-log_path = r"c:\Users\justv\OneDrive\Рабочий стол\nuclearity\sys\log.txt"
+log_path = r"c:\Games\nuclearity\nuclearity\sys\log.txt"
 
 class Warn:
     amount = 0

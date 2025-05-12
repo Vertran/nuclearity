@@ -2,35 +2,38 @@
     "main_menu":[
         {
             "type":"filler",
-            "rect": [960,540,1920,1080],
-            "color": [20,20,20]
+            "rect": [960,540,1900,1000],
+            "bg_color": [60,40,20,200]
         },
         {
             "type":"label",
             "text":"NUCLEARITY",
             "font":"Arial",
-            "size": 100,
+            "size": 500,
             "text_color":[255,255,255],
-            "pos":[980,250]
+            "pos":[960,540],
+            "bold": true
         },
         {
             "type":"button",
-            "action":"start_game",
+            "action": "start_game",
             "text":"Play",
             "font":"Arial",
+            "font_size":20,
             "rect":[960,600,200,75],
-            "color":[100,60,90],
+            "bg_color":[100,60,90],
             "outline":[100,60,90],
             "hover_color":[50,10,40],
             "text_color":[255,255,255]
         },
         {
             "type":"button",
-            "action":"settings",
+            "action":"menu.settings",
             "text":"Settings",
             "font":"Arial",
+            "font_size":20,
             "rect":[960,700,200,75],
-            "color":[100,60,90],
+            "bg_color":[100,60,90],
             "outline":[100,60,90],
             "hover_color":[50,10,40],
             "text_color":[255,255,255]
@@ -40,8 +43,9 @@
             "action":"exit",
             "text":"Exit",
             "font":"Arial",
+            "font_size":20,
             "rect":[960,800,200,75],
-            "color":[110,60,80],
+            "bg_color":[110,60,80],
             "outline":[110,60,80],
             "hover_color":[60,10,30],
             "text_color":[255,255,255]
@@ -51,36 +55,34 @@
         {
             "type":"filler",
             "rect": [960,540,1920,1080],
-            "color": [50,50,50]
+            "bg_color": [50,50,50]
         },
         {
             "type":"filler",
             "rect": [160,540,200,965],
-            "color": [0,0,0,20]
+            "bg_color": [0,0,0,20]
         },
         {
-            "type":"scroll-field",
-            "rect":[960,540,1800,965],
-            "color":[0,0,0,20],
-            "highlight":[20,20,20,40],
+            "type":"sub-menu",
             "menus":{
                 "game":{
-                    "name":"Game",
                     "action":"settings.game",
                     "content":[
                         {
-                            "label":"None",
                             "type":"checkbox",
+                            "label":"None",
                             "destination":"None",
                             "rect":[960,540,940,50],
-                            "color":[0,0,0,20]
+                            "bg_color":[0,0,0,20],
+                            "box_color":[250,250,250,20]
                         },
                         {
-                            "label":"None",
                             "type":"checkbox",
+                            "label":"None",
                             "destination":"None",
                             "rect":[960,570,940,50],
-                            "color":[0,0,0,20]
+                            "bg_color":[0,0,0,20],
+                            "box_color":[250,250,250,20]
                         }
                     ]
                 },
@@ -93,8 +95,8 @@
                     "action":"settings.graphics",
                     "content":[
                         {
-                            "label":"None",
                             "type":"checkbox",
+                            "label":"None",
                             "destination":"None"
                         }
                     ]
@@ -110,8 +112,9 @@
             "action":"back",
             "text":"<-",
             "font":"Arial",
-            "rect":[30,30,50,50],
-            "color":[110,60,80],
+            "font_size":10,
+            "rect":[30,40,50,50],
+            "bg_color":[110,60,80],
             "outline":[110,60,80],
             "hover_color":[60,10,30],
             "text_color":[255,255,255]

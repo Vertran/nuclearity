@@ -29,7 +29,7 @@ def play(screen_name):
                 while cap.isOpened():
                     for event in shared_data["events"]:
                         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
-                            shared_data["run"] = [False, False]
+                            shared_data["run"] = [False, [False, False]]
                             make_log("INFO", "Exited app")
                     ret, frame = cap.read()
                     if not ret:
@@ -41,7 +41,7 @@ def play(screen_name):
                     screen.blit(frame, (0, 0))
                     pygame.display.update()
 
-                shared_data["run"][1] = True
+                shared_data["run"][1][0] = True
                 cap.release()
                 #pygame.quit()
 

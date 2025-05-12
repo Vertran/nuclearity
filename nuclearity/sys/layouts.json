@@ -1,14 +1,40 @@
 {
     "main_menu": [
       {
+          "type":"filler",
+          "rect": [960,540,1920,1080],
+          "color": [20,40,20,100]
+      },
+      {
         "type": "button",
         "text": "Start Game",
-        "rect": [960, 300, 200, 80],
-        "color": [180, 180, 180],
+        "rect": [200, 200, 200, 200],
+        "color": [150, 150, 150],
         "hover_color": [220, 220, 220],
         "outline": [100, 100, 100],
         "text_color": [0, 0, 0],
         "action": "start_game"
+      },
+      {
+        "type": "button",
+        "text": "Start Game",
+        "rect": [400, 400, 200, 200],
+        "color": [150, 150, 150],
+        "hover_color": [220, 220, 220],
+        "outline": [100, 100, 100],
+        "text_color": [0, 0, 0],
+        "action": "start_game"
+      },
+      {
+          "type":"button",
+          "action": "start_game",
+          "text":"Play",
+          "font":"Arial",
+          "rect":[960,600,200,75],
+          "color":[100,60,90],
+          "outline":[100,60,90],
+          "hover_color":[50,10,40],
+          "text_color":[255,255,255]
       }
     ]
   }
