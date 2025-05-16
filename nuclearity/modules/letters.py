@@ -17,9 +17,7 @@ class TEXT:
         self.strike = kwargs.get('strike', False)
         self.outline = kwargs.get('outline', False)
         self.max_width = kwargs.get('max_width', 99)
-        self.calc_width = 0
 
-        max_w = 0
         for letter in self.text:
             if letter not in self.LETTERS:
                 self.converted.append(self.LETTERS['UNKNOWN'])
@@ -37,10 +35,6 @@ class TEXT:
         glBegin(GL_LINES)
         x_offset = 0
         y_offset = 0
-        for letter in self.converted:
-            for line in letter:
-                #if max_w < line[0][0] or max_w < line[1][0]:
-                self.calc_width += max(line[0][0], line[1][0]) * self.size
                     
         for letter in self.converted:
             for line in letter:

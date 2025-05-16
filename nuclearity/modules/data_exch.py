@@ -207,6 +207,9 @@ class UI_SubElement():
                            self.y + self.height / 2 + 20)
                 glVertex2f(self.x + self.width / 2 - 20,
                            self.y + self.height / 2 + 20)
+                
+    def update(self):
+        pass
 
 
 # Menu class. Operations with menu (load).
@@ -248,9 +251,6 @@ class Menu(UI_Element):
             ui.clear()
 
             for element in preset[sub_menu]["content"]:
-                ui.append(UI_Element(**element))
-
-            for element in preset:
                 ui.append(UI_Element(**element))
 
             make_log("INFO", "Sub-menu loaded:", sub_menu)

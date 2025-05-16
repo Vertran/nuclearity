@@ -1,17 +1,26 @@
 import render
 import threading
-import screens
-from data_exch import *
+import glfw
+from data_exch import shared_data, Menu
 from logger import make_log
 
 
 def main():
     #screens.play("startup")
     shared_data["run"][1] = [False, True]
-
-    Menu.load_menu("settings")
-    while shared_data["run"][0]:
+    
+    while not shared_data["window"]:
         threading.Event().wait(0.1)
+
+    window = shared_data["window"]
+
+    Menu.load_menu("main_menu")
+    while shared_data["run"][0]:
+        
+        mx, my = glfw.get_cursor_pos(window)
+
+        for element in shared_data["UI_elements"]:
+            element.update()
     make_log("INFO", "Main thread exited")
 
 

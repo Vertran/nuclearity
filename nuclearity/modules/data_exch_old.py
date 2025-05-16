@@ -5,16 +5,28 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import glfw
+import os
 
 __all__ = ["COLORS", "shared_data", "UI_Element"]
+
+
+root_path = os.path.dirname(os.path.dirname(__file__))
+
+with open(f"{root_path}\\sys\\settings.json") as file:
+    settings = json.load(file)
 
 shared_data = {
     "run": [True, [True, False]], #Full, [Overlay, 3D]
     "menu": "main_menu",
-    "screen": [1920, 1000],
-    "cursor_fixation": False,
+    "screen": [*settings["screen"]["resolution"]],
+    "window": None,
+    "cursor_fixation": settings["gameplay"]["cursor_fixation"],
     "UI_elements": [],
+    "root_path": root_path
 }
+
+print(shared_data['screen'], shared_data['cursor_fixation'])
+
 
 class COLORS:
     WHITE = (255, 255, 255)
@@ -260,7 +272,22 @@ class UI_Element:
                 case _:
                     raise ValueError(f"Unknown UI element type: {element['type']}")
 
-        
+class FileSys:
+    def __init__(self, state, search_level=3):
+        self.root = shared_data['root_path']
+        self.state = state
+        self.level = search_level
+        self.settings_p = ''
+        self.def_settings_p = ''
+
+    def save(self):
+        with open(self.settings_p, 'w') as file:
+            file = shared_data['settings']
+
+    def reset(self):
+        with open(self.settings_p, 'w') as file:
+            file = self.def_settings_p
+
 
 #load_menu(shared_data["menu"])
 make_log("INFO", "DataSharing started successfully")

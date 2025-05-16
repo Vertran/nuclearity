@@ -42,10 +42,11 @@ def main():
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
 
-    #with open(".\\sys\\layouts copy.json", "r") as file:
-        #shared_data["UI_elements"] = json.load(file)["main_menu"]
+    shared_data["window"] = window
 
-    while not glfw.window_should_close(window):
+    while not glfw.window_should_close(window) and shared_data["run"][0]:
+
+
         glClearColor(0.2, 0.2, 0.2, 1.0)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glLoadIdentity()
@@ -55,9 +56,6 @@ def main():
         glOrtho(0, shared_data["screen"][0], shared_data["screen"][1], 0, -1, 1)
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
-        
-        mx, my = glfw.get_cursor_pos(window)
-
 
         for element in shared_data["UI_elements"]:
             element.draw()
@@ -65,6 +63,8 @@ def main():
         glfw.swap_buffers(window)
         glfw.poll_events()
 
+
+    shared_data["run"] = [False, [False, False]]
     glfw.terminate()
 
 make_log("INFO", "RenderEngine started successfully")
