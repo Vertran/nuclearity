@@ -1,0 +1,8 @@
+#file that stores all elements of the main menu
+main_menu:
+  background:           [20, 20, 20]
+  title:                [220, 220, 220]
+  play_button:          [150, 40, 40]
+  play_button_hover:    [40, 150, 40]
+  quit_button:          [200, 20, 20]
+  quit_button_hover:    [10, 10, 10]
