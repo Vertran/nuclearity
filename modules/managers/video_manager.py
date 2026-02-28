@@ -5,13 +5,12 @@ log = instancer.log
 from OpenGL.GL import * #type: ignore
 import numpy as np
 import glfw
-
+import ctypes
+import math
 
 
 class VideoManager:
     def __init__(self):
-        #==> imports
-        import ctypes
 
         #==> base
         log.info("Initializing Video Manager")
@@ -40,8 +39,11 @@ class VideoManager:
         glBindBuffer(GL_ARRAY_BUFFER, self.VBO)
         glBufferData(GL_ARRAY_BUFFER, self.vertices.nbytes, self.vertices, GL_STATIC_DRAW) #type: ignore
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * 4, ctypes.c_void_p(0))
+        stride = 6 * 4
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, ctypes.c_void_p(0))
         glEnableVertexAttribArray(0)
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, ctypes.c_void_p(12))
+        glEnableVertexAttribArray(1)
         glBindVertexArray(0)
 
 
@@ -76,26 +78,31 @@ class VideoManager:
         if not VERTEX_SHADER:
             log.warn('No Vertex shader found. Fallback to default')
             VERTEX_SHADER = """
-#version 330 core
+            #version 330 core
 
-layout(location = 0) in vec3 aPos;
+            layout(location = 0) in vec3 aPos;
+            layout(location = 1) in vec3 aColor;
 
-void main() {
-    gl_Position = vec4(aPos, 1.0);
-}
-"""
+            out vec3 vertexColor;
+
+            void main() {
+                gl_Position = vec4(aPos, 1.0);
+                vertexColor = aColor;
+            }
+            """
 
         if not FRAGMENT_SHADER:
             log.warn('No Fragment shader found. Fallback to default')
             FRAGMENT_SHADER = """
-#version 330 core
+            #version 330 core
 
-out vec4 FragColor;
+            in vec3 vertexColor;
+            out vec4 FragColor;
 
-void main() {
-    FragColor = vec4(1.0, 0.5, 0.2, 1.0);
-}
-"""
+            void main() {
+                FragColor = vec4(vertexColor, 1.0);
+            }
+            """
 
         vert = compile_shader(VERTEX_SHADER, GL_VERTEX_SHADER)
         frag = compile_shader(FRAGMENT_SHADER, GL_FRAGMENT_SHADER)
@@ -123,9 +130,9 @@ void main() {
         else:
             log.warn('No vertiсes provided', 'Filling with basic triangle')
             self.vertices = np.array([
-                -0.5, -0.5, 0.0,
-                0.5, -0.5, 0.0,
-                0.0,  0.5, 0.0,
+                -0.5, -0.5, 0.0,  1.0, 0.0, 0.0,
+                 0.5, -0.5, 0.0,  0.0, 1.0, 0.0,
+                 0.0,  0.5, 0.0,  0.0, 0.0, 1.0,
             ], dtype=np.float32)
 
         
@@ -136,26 +143,40 @@ void main() {
 
         glfw.make_context_current(self.window)
 
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+
     def main(self):
-        #==> CLEAR ON CLOSE
-        if glfw.window_should_close(self.window):
-            glDeleteVertexArrays(1, [self.VAO])
-            glDeleteBuffers(1, [self.VBO])
-            glDeleteProgram(self.shader_program)
-            glfw.terminate()
-
-            return
-
-
-        glfw.poll_events()
-
-        glClearColor(0.1, 0.1, 0.1, 1.0)
-        glClear(GL_COLOR_BUFFER_BIT)
-
         glUseProgram(self.shader_program)
-        glBindVertexArray(self.VAO)
-        glDrawArrays(GL_TRIANGLES, 0, 3)
+        color_location = glGetUniformLocation(self.shader_program, "uAlpha")
+        while instancer.state['drawing']:
+            #==> CLEAR ON CLOSE
+            if glfw.window_should_close(self.window):
+                glDeleteVertexArrays(1, [self.VAO])
+                glDeleteBuffers(1, [self.VBO])
+                glDeleteProgram(self.shader_program)
+                glfw.terminate()
 
-        glfw.swap_buffers(self.window)
+                return
+
+
+            glfw.poll_events()
+
+            time = glfw.get_time()
+
+            alpha = math.sin(time) * 0.5 + 0.5
+
+
+
+            glClearColor(0.1, 0.1, 0.1, 1.0)
+            glClear(GL_COLOR_BUFFER_BIT)
+
+            glUseProgram(self.shader_program)
+            glUniform1f(color_location, alpha)
+
+            glBindVertexArray(self.VAO)
+            glDrawArrays(GL_TRIANGLES, 0, 3)
+
+            glfw.swap_buffers(self.window)
 
         

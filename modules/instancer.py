@@ -13,3 +13,8 @@ managers: dict = {
     "internet": None,
     "console": None,
 }
+
+state: dict = {
+    "running": True,
+    "drawing": True,
+}
