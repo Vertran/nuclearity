@@ -1,6 +1,7 @@
 import time
 import os
 import sys
+import glfw
 
 import modules.instancer as instancer
 
@@ -8,6 +9,7 @@ import modules.instancer as instancer
 #===> [logger]
 from modules.logger import Logger
 Logger()
+assert instancer.log is not None
 
 log = instancer.log
 i = 0
@@ -24,6 +26,7 @@ while log is None:
 #===> [filer]
 from modules.filer import Filer
 Filer()
+assert instancer.filer is not None
 
 filer = instancer.filer
 i = 0
@@ -42,18 +45,26 @@ while filer is None:
 #===> [console manager]
 from modules.managers.console_manager import Console
 Console()
+assert instancer.managers['console'] is not None
+console_manager = instancer.managers['console']
 
 #===> [video manager]
 from modules.managers.video_manager import VideoManager
 VideoManager()
+assert instancer.managers['video'] is not None
+video_manager = instancer.managers['video']
 
 #===> [audio manager]
 from modules.managers.audio_manager import AudioManager
 AudioManager()
+assert instancer.managers['audio'] is not None
+audio_manager = instancer.managers['audio']
 
 #===> [internet manager]
 from modules.managers.internet_manager import InternetManager
 InternetManager()
+assert instancer.managers['internet'] is not None
+internet_manager = instancer.managers['internet']
 
 #==== <PRE-MAIN> ====#
 field_nuclearity = filer.open_frames("data/other/fields.txt")
@@ -84,7 +95,6 @@ def cat_file():
         log.warn(f"failed to open file: `{path}`")
 
 def console_ui():
-    import keyboard
     from colorama import Fore, Back, Style, init
 
     init()
@@ -134,7 +144,7 @@ def console_ui():
             print(' ', f"{command['display']}\033[K")
 
     while run:
-        if keyboard.is_pressed('up'):
+        if glfw.get_key(video_manager.window, glfw.KEY_UP) == glfw.PRESS:
             if selected_id == 0:
                 selected_id = len(commands) - 1
                 commands[0]['is_active'] = False
@@ -154,9 +164,8 @@ def console_ui():
                 else:
                     print(' ', f"{command['display']}\033[K")
 
-            keyboard.wait('up', trigger_on_release=False)
 
-        elif keyboard.is_pressed('down'):
+        elif glfw.get_key(video_manager.window, glfw.KEY_DOWN) == glfw.PRESS:
             if selected_id == len(commands) - 1:
                 selected_id = 0
                 commands[len(commands) - 1]['is_active'] = False
@@ -175,15 +184,9 @@ def console_ui():
                     print(' ', f"{command['display']}\033[K")
 
 
-            keyboard.wait('down', trigger_on_release=False)
 
-        elif keyboard.is_pressed('enter'):
+        elif glfw.get_key(video_manager.window, glfw.KEY_ENTER) == glfw.PRESS:
             commands[selected_id]['function']()
-
-            keyboard.wait('enter', trigger_on_release=False)
-        
-        
-
 
         time.sleep(0.01)
     
@@ -198,6 +201,7 @@ def console_ui():
 
 #==== <MAIN> ====#
 def main():
+    video_manager.main()
     console_ui()
     log.info('Entering main loop')
     while True:

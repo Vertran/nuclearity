@@ -1,5 +1,5 @@
 import glfw
-from OpenGL.GL import *
+from OpenGL.GL import * #type: ignore
 
 def main():
     if not glfw.init():

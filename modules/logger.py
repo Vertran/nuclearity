@@ -47,7 +47,7 @@ class Logger:
 
 
         if description:
-            log_entry += "\n" + " "*offset + f"{description:^120}\n"
+            log_entry += "\n" + " "*offset + f"{description}\n"
             
 
         with open(log_path, "a", encoding="utf-8") as log_file:

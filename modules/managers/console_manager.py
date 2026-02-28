@@ -1,5 +1,9 @@
 import modules.instancer as instancer
+assert instancer.log is not None
 log = instancer.log
+
+assert instancer.filer is not None
+filer = instancer.filer
 
 import sys
 
@@ -19,7 +23,7 @@ class Console:
         log.info("Initializing console manager")
 
         #==> sys
-        self.mode = 'sui' #SimpleUI|NoUI
+        self.mode = 'sui' #SimpleUI|NoUI|GraphicsUI
         self.commands = {}
 
         #==> general
@@ -30,5 +34,5 @@ class Console:
         instancer.managers["console"] = self
         log.info("Console manager initialized")
 
-    def draw():
+    def draw(self):
         pass
