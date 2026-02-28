@@ -5,5 +5,6 @@ filer = None
 managers = {
     "video": None,
     "audio": None,
-    "multiplayer": None
+    "internet": None,
+    "console": None,
 }

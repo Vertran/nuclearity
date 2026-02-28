@@ -1,0 +1,9 @@
+game:
+  - params:
+      width:
+        min: 800
+        max: 1920
+      height:
+        min: 600
+        max: 1080
+      title: "NUCLEARITY.{GAME_MSG}"

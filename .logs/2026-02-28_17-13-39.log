@@ -1,0 +1,27 @@
+
+[2026-02-28 17:13:39] [ logger.py ] [ INFO ] Logger initialized
+[2026-02-28 17:13:39] [ filer.py  ] [ INFO ] loading filer module
+[2026-02-28 17:13:39] [ filer.py  ] [ INFO ] initializing filer module worker
+[2026-02-28 17:13:39] [console_manager.py] [ INFO ] Initializing console manager
+[2026-02-28 17:13:39] [console_manager.py] [ INFO ] Console manager initialized
+[2026-02-28 17:13:39] [video_manager.py] [ INFO ] Initializing Video Manager
+[2026-02-28 17:13:39] [video_manager.py] [ INFO ] Video Manager initialized successfully
+[2026-02-28 17:13:39] [audio_manager.py] [ INFO ] Initializing Audio Manager
+[2026-02-28 17:13:39] [audio_manager.py] [ INFO ] Audio Manager initialized successfully
+[2026-02-28 17:13:39] [internet_manager.py] [ INFO ] Initializing Internet Manager
+[2026-02-28 17:13:39] [internet_manager.py] [ INFO ] Internet Manager initialized successfully
+[2026-02-28 17:13:39] [ filer.py  ] [ INFO ] opening text file: data/other/fields.txt
+[2026-02-28 17:13:39] [  main.py  ] [ INFO ] main.py first log. Welcome to:
+
+ooooo      ooo ooooo     ooo   .oooooo.   ooooo        oooooooooooo       .o.       ooooooooo.   ooooo ooooooooooooo oooooo   oooo
+`888b.     `8' `888'     `8'  d8P'  `Y8b  `888'        `888'     `8      .888.      `888   `Y88. `888' 8'   888   `8  `888.   .8'
+ 8 `88b.    8   888       8  888           888          888             .8"888.      888   .d88'  888       888        `888. .8'
+ 8   `88b.  8   888       8  888           888          888oooo8       .8' `888.     888ooo88P'   888       888         `888.8'
+ 8     `88b.8   888       8  888           888          888    "      .88ooo8888.    888`88b.     888       888          `888'
+ 8       `888   `88.    .8'  `88b    ooo   888       o  888       o  .8'     `888.   888  `88b.   888       888           888
+o8o        `8     `YbodP'     `Y8bood8P'  o888ooooood8 o888ooooood8 o88o     o8888o o888o  o888o o888o     o888o         o888o
+
+
+[2026-02-28 17:13:39] [ filer.py  ] [ INFO ] opening style file: data/styles/main_menu/menu.yaml of type: yaml
+[2026-02-28 17:13:39] [ filer.py  ] [ERROR ] failed to open style file: data/styles/main_menu/menu.yaml with error:
+                                                     No module named 'yaml'                                                 

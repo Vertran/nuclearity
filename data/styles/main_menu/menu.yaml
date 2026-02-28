@@ -1,8 +1,23 @@
-#file that stores all elements of the main menu
-main_menu:
-  background:           [20, 20, 20]
-  title:                [220, 220, 220]
-  play_button:          [150, 40, 40]
-  play_button_hover:    [40, 150, 40]
-  quit_button:          [200, 20, 20]
-  quit_button_hover:    [10, 10, 10]
+structure:
+  - id: button.play
+    type: button
+    properties:
+      text: "Play"
+      font_size: 24
+      color: [200, 200, 200]
+      background_color: [20, 20, 20]
+      padding: 10
+      border_radius: 5
+      hover:
+        background_color: [60, 60, 60]
+  - id: button.settings
+    type: button
+    properties:
+      text: "Settings"
+      font_size: 24
+      color: [200, 200, 200]
+      background_color: [20, 20, 20]
+      padding: 10
+      border_radius: 5
+      hover:
+        background_color: [60, 60, 60]
