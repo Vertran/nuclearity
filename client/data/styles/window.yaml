@@ -1,0 +1,6 @@
+game:
+  - params:
+      resolution: 1920x1080
+      fullscreen: True
+      
+      title: "NUCLEARITY"

@@ -1,0 +1,61 @@
+#main.yaml
+
+structure:
+  - properties:
+      name: "bg.filler"
+      type: rect
+      pos: [0, 0]
+      dim: [1920, 1080]
+      base_color: [20, 20, 200]
+      outline_color: [20, 20, 20]
+      image_texture: "client/data/images/bg.placeholder.png"
+      image_opacity: 1
+      centered: [True, True]
+
+  - properties:
+      name: "badawdawdar"
+      type: button
+      pos: [0, 0]
+      dim: [500, 600]
+      base_color: [20, 120, 20]
+      outline_color: [20, 20, 20]
+      image_texture: False #"client/data/images/bg.placeholder.png"
+      image_opacity: 0
+      hover:
+        base_color: [70, 70, 70]
+        outline_color: [60, 60, 60]
+      centered: [True, True]
+
+  - properties:
+      name: "button.play"
+      type: button
+      pos: [-80,-300]
+      dim: [150, 50]
+      text: "Play"
+      font_size: 24
+      base_color: [20, 20, 20]
+      outline_color: [20, 20, 20]
+      image_texture: False
+      image_opacity: 0
+      outline_thickness: 2
+      hover:
+        base_color: [70, 70, 70]
+        outline_color: [60, 60, 60]
+      centered: [True, True]
+
+  - properties:
+      name: "button.Settings"
+      type: button
+      pos: [80,-300]
+      dim: [150, 50]
+      text: "Settings"
+      font_size: 24
+      base_color: [20, 20, 20]
+      outline_color: [20, 20, 20]
+      image_texture: False
+      image_opacity: 0
+      outline_thickness: 2
+      hover:
+        base_color: [70, 70, 70]
+        outline_color: [60, 60, 60]
+      centered: [True, True]
