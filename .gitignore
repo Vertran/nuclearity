@@ -1,1 +1,7 @@
 *.log
+*.pyc
+__pycache__
+/client/modules/managers/__pycache__
+/client/modules/__pycache__
+/client/modules/__pycache__
+/client/modules/managers/submodules/__pycache__

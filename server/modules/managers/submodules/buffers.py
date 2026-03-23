@@ -1,5 +1,7 @@
 import modules.instancer as instancer
+
 log = instancer.log
+
 
 class Buffer:
     def __init__(self, name):
@@ -8,7 +10,7 @@ class Buffer:
 
     def reset_buffer(self):
         self.buffer.clear()
-        log.info(f'Cleared the buffer: {self.name}')
+        log.info(f"Cleared the buffer: {self.name}")
 
     def add(self, object, pos=None):
         try:
@@ -18,11 +20,11 @@ class Buffer:
             else:
                 self.buffer.insert(pos, object)
         except Exception as e:
-            log.error(f'An error occured while adding an element to {self.name}:', str(e))
+            log.error(f"An error occured while adding an element to {self.name}:", str(e))
 
     def remove(self, pos):
         try:
             self.buffer.pop(pos)
 
         except Exception as e:
-            log.error(f'An error occured while removing the element from {self.name}:', str(e))
+            log.error(f"An error occured while removing the element from {self.name}:", str(e))

@@ -1,75 +1,85 @@
 import modules.instancer as instancer
+
 assert instancer.log is not None
 log = instancer.log
 
-assert instancer.managers['object'] is not None
-object_manager = instancer.managers['object']
+assert instancer.managers["object"] is not None
+object_manager = instancer.managers["object"]
 
-from OpenGL.GL import * #type: ignore
-import numpy as np
-import glfw
 import ctypes
-import glm
-import yaml
 import os
+
+import glfw
+import glm
+import numpy as np
+import yaml
+from OpenGL.GL import *
 
 
 class VideoManager:
     def __init__(self):
 
-        #==> base
+        # ==> base
         log.info("Initializing Video Manager")
         self.screen = None
         self.clock = None
 
-        #os.environ["XDG_SESSION_TYPE"] = "wayland"
-        if not glfw.init(): #glfw.init_hint(glfw.PLATFORM, glfw.PLATFORM_WAYLAND):
-            log.error('GLFW is not initialised')
+        # os.environ["XDG_SESSION_TYPE"] = "wayland"
+        if not glfw.init():  # glfw.init_hint(glfw.PLATFORM, glfw.PLATFORM_WAYLAND):
+            log.error("GLFW is not initialised")
 
-        #==> glfw
+        # ==> glfw
         glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 3)
         glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 3)
         glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
 
-        #==> window
+        # ==> window
         self.window = None
 
-        with open('client/data/styles/window.yaml', 'r', encoding='utf-8') as f:
-            window_config = yaml.safe_load(f)['game'][0]
+        with open("client/data/styles/window.yaml", "r", encoding="utf-8") as f:
+            window_config = yaml.safe_load(f)["game"][0]
 
         self.create_window(**window_config)
+        if not self.window:
+            log.error("Failed to create GLFW window")
+            glfw.terminate()
+            raise RuntimeError("GLFW window creation failed")
+
+        self.view = glm.lookAt(
+            glm.vec3(0, 0, 10),
+            glm.vec3(0, 0, 0),
+            glm.vec3(0, 1, 0)
+        )
 
         self.draw_objects = []
         self.update_objects = []
 
-        object_manager.create_from_file('client/data/styles/main_menu/menu.yaml')
+        object_manager.create_from_file("client/data/styles/main_menu/menu.yaml")
         self.clone_buffers()
 
-#        self.init_vert()
+        #        self.init_vert()
 
-        #==> buffers
-#        self.VAO = glGenVertexArrays(1)
-#        self.VBO = glGenBuffers(1)
+        # ==> buffers
+        #        self.VAO = glGenVertexArrays(1)
+        #        self.VBO = glGenBuffers(1)
 
-#        glBindVertexArray(self.VAO)
+        #        glBindVertexArray(self.VAO)
 
-#        glBindBuffer(GL_ARRAY_BUFFER, self.VBO)
-#        glBufferData(GL_ARRAY_BUFFER, self.vertices.nbytes, self.vertices, GL_STATIC_DRAW) #type: ignore
+        #        glBindBuffer(GL_ARRAY_BUFFER, self.VBO)
+        #        glBufferData(GL_ARRAY_BUFFER, self.vertices.nbytes, self.vertices, GL_STATIC_DRAW) #type: ignore
 
-#        stride = 4 * 4
-#        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, ctypes.c_void_p(0))
-#        glEnableVertexAttribArray(0)
-#        glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, stride, ctypes.c_void_p(12))
-#        glEnableVertexAttribArray(1)
-#        glBindVertexArray(0)
+        #        stride = 4 * 4
+        #        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, ctypes.c_void_p(0))
+        #        glEnableVertexAttribArray(0)
+        #        glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, stride, ctypes.c_void_p(12))
+        #        glEnableVertexAttribArray(1)
+        #        glBindVertexArray(0)
 
+        self.shader_program = self.create_program("client/data/shaders/", "ui.vert.glsl", "ui.frag.glsl")
 
-        self.shader_program = self.create_program('client/data/shaders/', 'vertex.base.glsl', 'fragment.glsl')
-
-        #==> post
+        # ==> post
         instancer.managers["video"] = self
         log.info("Video Manager initialized successfully")
-
 
     def create_program(self, folder_path, vert_shader, frag_shader):
         def compile_shader(source, shader_type):
@@ -79,21 +89,19 @@ class VideoManager:
 
             if not glGetShaderiv(shader, GL_COMPILE_STATUS):
                 error = glGetShaderInfoLog(shader).decode()
-                log.error('Shader Compilation Error:', error)
+                log.error("Shader Compilation Error:", error)
                 raise RuntimeError(f"Shader Compilation Error: {error}")
 
             return shader
 
-
-        with open(folder_path+vert_shader, 'r', encoding='utf-8') as f:
+        with open(folder_path + vert_shader, "r", encoding="utf-8") as f:
             VERTEX_SHADER = f.read()
 
-
-        with open(folder_path+frag_shader, 'r', encoding='utf-8') as f:
+        with open(folder_path + frag_shader, "r", encoding="utf-8") as f:
             FRAGMENT_SHADER = f.read()
 
         if not VERTEX_SHADER:
-            log.warn('No Vertex shader found. Fallback to default')
+            log.warn("No Vertex shader found. Fallback to default")
             VERTEX_SHADER = """
             #version 330 core
 
@@ -109,7 +117,7 @@ class VideoManager:
             """
 
         if not FRAGMENT_SHADER:
-            log.warn('No Fragment shader found. Fallback to default')
+            log.warn("No Fragment shader found. Fallback to default")
             FRAGMENT_SHADER = """
             #version 330 core
 
@@ -131,10 +139,9 @@ class VideoManager:
 
         if not glGetProgramiv(self.program, GL_LINK_STATUS):
             error = glGetProgramInfoLog(self.program).decode()
-            log.error('Linking Programm error:', error)
+            log.error("Linking Programm error:", error)
             raise RuntimeError(f"Linking programm error: {error}")
 
-        
         glDeleteShader(vert)
         glDeleteShader(frag)
 
@@ -147,22 +154,27 @@ class VideoManager:
         if vertices is not None:
             self.vertices = vertices
         else:
-            log.warn('No vertiсes provided', 'Filling with basic triangle')
-            self.vertices = np.array([
-                -0.5, -0.5, 0.0,  1.0, 0.0, 0.0,
-                 0.5, -0.5, 0.0,  0.0, 1.0, 0.0,
-                 0.0,  0.5, 0.0,  0.0, 0.0, 1.0,
-            ], dtype=np.float32)
+            log.warn("No vertiсes provided", "Filling with basic triangle")
+            self.vertices = np.array(
+                [ # fmt: off
+                    -0.5, -0.5,  0.0,
+                     1.0,  0.0,  0.0,
+                     0.5, -0.5,  0.0,
+                     0.0,  1.0,  0.0,
+                     0.0,  0.5,  0.0,
+                     0.0,  0.0,  1.0,
+                ], # fmt: on
+                dtype=np.float32,
+            )
 
-        
     def create_window(self, **conf):
-        dim = conf.get('resolution', '1920x1080').split('x')
+        dim = conf.get("resolution", "1920x1080").split("x")
         w = int(dim[0])
         h = int(dim[1])
 
-        name = conf.get('title', 'No Name Provided Jerk')
+        name = conf.get("title", "No Name Provided Jerk")
 
-        if conf.get('fullscreen', False):
+        if conf.get("fullscreen", False):
             monitor = glfw.get_primary_monitor()
         else:
             monitor = None
@@ -172,7 +184,7 @@ class VideoManager:
         glfw.make_context_current(self.window)
 
         w, h = glfw.get_framebuffer_size(self.window)
-        self.projection = glm.ortho(0.0, float(w), float(h), 0.0, -1.0, 1.0)
+        self.projection = glm.perspective(glm.radians(45.0), w/h, 0.1, 1000.0)
 
         glViewport(0, 0, w, h)
 
@@ -181,43 +193,41 @@ class VideoManager:
 
         def on_resize(window, rw, rh):
             glViewport(0, 0, rw, rh)
-            self.projection = glm.ortho(0.0, float(rw), float(rh), 0.0, -1.0, 1.0)
+            self.projection = glm.perspective(glm.radians(45.0), w/h, 0.1, 1000.0)
 
         glfw.set_framebuffer_size_callback(self.window, on_resize)
 
-        instancer.screen['dim'] = [w, h]
-        instancer.screen['fdim'] = [fw, fh]
-        instancer.screen['name'] = name
+        instancer.screen["dim"] = [w, h]
+        instancer.screen["fdim"] = [fw, fh]
+        instancer.screen["name"] = name
 
-        log.info(f'Created window: `{name}` [{w}x{h}] framebuffer:[{fw}x{fh}]')
+        log.info(f"Created window: `{name}` [{w}x{h}] framebuffer:[{fw}x{fh}]")
 
-    
     def clone_buffers(self):
         obj = object_manager.get_objects()
         self.draw_objects = obj[0]
         self.update_objects = obj[1]
-        log.info('Cloned buffers')
+        log.info("Cloned buffers")
 
     def main(self):
         glUseProgram(self.shader_program)
         glUniform1i(glGetUniformLocation(self.shader_program, "uTexture"), 0)
-        
+
         locs = {
-            "proj":  glGetUniformLocation(self.shader_program, "uProjection"),
-            "base":  glGetUniformLocation(self.shader_program, "uBaseCol"),
-            "out":   glGetUniformLocation(self.shader_program, "uOutCol"),
-            "hBase": glGetUniformLocation(self.shader_program, "uHoverBaseCol"),
-            "hOut":  glGetUniformLocation(self.shader_program, "uHoverOutCol"),
-            "state": glGetUniformLocation(self.shader_program, "uHoverState"),
-            "mouse": glGetUniformLocation(self.shader_program, "uMousePos"),
-            "time": glGetUniformLocation(self.shader_program, "uTime"),
-            "dist_strength": glGetUniformLocation(self.shader_program, "uDistortionStrength"),
-            "use_texture": glGetUniformLocation(self.shader_program, "uUseTexture"),
+            "proj":         glGetUniformLocation(self.shader_program, "uProjection"),
+            "base":         glGetUniformLocation(self.shader_program, "uBaseCol"),
+            "out":          glGetUniformLocation(self.shader_program, "uOutCol"),
+            "hBase":        glGetUniformLocation(self.shader_program, "uHoverBaseCol"),
+            "hOut":         glGetUniformLocation(self.shader_program, "uHoverOutCol"),
+            "state":        glGetUniformLocation(self.shader_program, "uHoverState"),
+            "use_texture":  glGetUniformLocation(self.shader_program, "uUseTexture"),
+            "view":         glGetUniformLocation(self.shader_program, "uView"),
+            "model":        glGetUniformLocation(self.shader_program, "uModel"),
         }
-        while instancer.state['drawing']:
-            #==> CLEAR ON CLOSE
+        while instancer.state["drawing"]:
+            # ==> CLEAR ON CLOSE
             if glfw.window_should_close(self.window):
-                log.info('Window closed. Terminating')
+                log.info("Window closed. Terminating")
 
                 for object in self.draw_objects:
                     glDeleteVertexArrays(1, [object.VAO])
@@ -228,7 +238,6 @@ class VideoManager:
 
                 return
 
-
             glfw.poll_events()
             glClearColor(0.1, 0.1, 0.1, 1.0)
             glClear(GL_COLOR_BUFFER_BIT)
@@ -236,27 +245,23 @@ class VideoManager:
             glUseProgram(self.shader_program)
             glUniformMatrix4fv(locs["proj"], 1, GL_FALSE, glm.value_ptr(self.projection))
 
-
             mouse_x, mouse_y = glfw.get_cursor_pos(self.window)
 
-            glUniform2f(locs['mouse'], mouse_x, mouse_y)
-            glUniform1f(locs['time'], glfw.get_time())
-            glUniform1f(locs['dist_strength'], 20.0)
+            glUniformMatrix4fv(locs["view"], 1, GL_FALSE, glm.value_ptr(self.view))
 
             for object in self.update_objects:
                 object.update(cur_pos=(mouse_x, mouse_y))
 
             for object in self.draw_objects:
                 uniforms = object.get_uniforms()
-                glUniform1f(locs['use_texture'],    uniforms['use_texture'])
-                glUniform3f(locs["base"],           *uniforms['base'])
-                glUniform3f(locs["out"],            *uniforms['out'])
-                glUniform3f(locs["hBase"],          *uniforms['hBase'])
-                glUniform3f(locs["hOut"],           *uniforms['hOut'])
-                glUniform1f(locs["state"],          uniforms['state'])
+
+                glUniform1i(locs["use_texture"], uniforms["use_texture"])
+                glUniform1f(locs["state"], uniforms["state"])
+                glUniform3f(locs["base"], *uniforms["base"])
+                glUniform3f(locs["out"], *uniforms["out"])
+                glUniform3f(locs["hBase"], *uniforms["hBase"])
+                glUniform3f(locs["hOut"], *uniforms["hOut"])
+                glUniformMatrix4fv(locs["model"], 1, GL_FALSE, glm.value_ptr(uniforms["model"]))
                 object.draw()
-        
 
             glfw.swap_buffers(self.window)
-
-        

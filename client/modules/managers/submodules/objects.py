@@ -1,11 +1,12 @@
-from OpenGL.GL import * #type: ignore
-import math
 import ctypes
-import time
+import math
+
+import glm
+import modules.instancer as instancer
 import numpy as np
+from OpenGL.GL import *  #type: ignore
 from PIL import Image
 
-import modules.instancer as instancer
 assert instancer.log is not None
 log = instancer.log
 
@@ -24,13 +25,15 @@ class ObjectDrawable2D:
 
 
     def get_uniforms(self):
+        self.model = glm.mat4(1.0)
         return {
-            "base":       self.base_color,
-            "out":        self.outline_color,
-            "hBase":      self.hover_base_color,
-            "hOut":       self.hover_outline_color,
-            "state":      self.hover_factor,
-            "use_texture": 1 if self.image_texture else 0,
+            "model":        self.model,
+            "base":         self.base_color,
+            "out":          self.outline_color,
+            "hBase":        self.hover_base_color,
+            "hOut":         self.hover_outline_color,
+            "state":        self.hover_factor,
+            "use_texture":  1 if self.image_texture else 0,
         }
 
     def load_texture(self, path):

@@ -1,13 +1,13 @@
-import time
 import inspect
 import os
+import time
 
 import modules.instancer as instancer
 
-log_path = f".logs/{time.strftime('%Y-%m-%d_%H-%M-%S')}.log"
+log_path = f".logs/server/{time.strftime('%Y-%m-%d_%H-%M-%S')}.log"
 
-os.makedirs(".logs", exist_ok=True)
-    
+os.makedirs(".logs/server", exist_ok=True)
+
 
 class Logger:
     def __init__(self):
@@ -19,36 +19,34 @@ class Logger:
 
         instancer.log.info("Logger initialized")
 
-    def info(self, text='', desc='', offset=4):
-        self._make_log('info', message=text, description=desc, offset=offset)
+    def info(self, text="", desc="", offset=4):
+        self._make_log("info", message=text, description=desc, offset=offset)
 
-    def debug(self, text='', desc='', offset=4):
-        self._make_log('debug', message=text, description=desc, offset=offset)
+    def debug(self, text="", desc="", offset=4):
+        self._make_log("debug", message=text, description=desc, offset=offset)
 
-    def warn(self, text='', desc='', offset=4):
-        self._make_log('warn', message=text, description=desc, offset=offset)
+    def warn(self, text="", desc="", offset=4):
+        self._make_log("warn", message=text, description=desc, offset=offset)
 
-    def error(self, text='', desc='', offset=4):
-        self._make_log('error', message=text, description=desc, offset=offset)
+    def error(self, text="", desc="", offset=4):
+        self._make_log("error", message=text, description=desc, offset=offset)
 
     def get_session_logs(self):
         return self.session_logs
 
     def _make_log(self, level="DEBUG", message="Debug", description=None, timestamp=None, offset=4):
         stack = inspect.stack()
-        
-        caller_frame = stack[2] 
+
+        caller_frame = stack[2]
         module = os.path.basename(caller_frame.filename)
 
         if timestamp is None:
             timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        
-        log_entry = f"\n[{timestamp}] [{module:^11}] [{level.upper():^6}] {message}"
 
+        log_entry = f"\n[{timestamp}] [{module:^11}] [SERVER] [{level.upper():^6}] {message}"
 
         if description:
-            log_entry += "\n" + " "*offset + f"{description}\n"
-            
+            log_entry += "\n" + " " * offset + f"{description}\n"
 
         with open(log_path, "a", encoding="utf-8") as log_file:
             log_file.write(log_entry)
@@ -63,15 +61,11 @@ class Logger:
         else:
             self.warn("No log file to clear")
 
-    
     def kill(self):
-        self.info('killing logger')
+        self.info("killing logger")
         self.session_logs = []
         self.log_path = None
 
         instancer.log = None
 
         self.info("Logger killed. Bye")
-
-
-        

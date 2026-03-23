@@ -1,3 +1,5 @@
+from ctypes import memset
+
 import modules.instancer as instancer
 
 assert instancer.log is not None
@@ -21,14 +23,17 @@ class NetworkManager:
         log.info("Network Manager initialized successfully")
 
     def connect(self):
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.connect((self.host, self.port))
-        self.running = True
-        print(f"[CLIENT] Connected to {self.host}:{self.port}")
+        try:
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.sock.connect((self.host, self.port))
+            self.running = True
+            print(f"[CLIENT] Connected to {self.host}:{self.port}")
 
-        # слушаем в отдельном потоке
-        t = threading.Thread(target=self._recv_loop, daemon=True)
-        t.start()
+            # слушаем в отдельном потоке
+            t = threading.Thread(target=self._recv_loop, daemon=True)
+            t.start()
+        except Exception as e:
+            log.error('A Network Exception occured:', str(e))
 
     def _recv_loop(self):
         buffer = ""
@@ -47,7 +52,15 @@ class NetworkManager:
                 break
 
     def _on_message(self, msg):
-        print(f"[CLIENT] Received: {msg}")
+        match msg['type']:
+            case 'init':
+                print('You`re now an initialised client')
+            case 'terminal_input':
+                message = msg['message']
+                sender = msg['sender']
+                print(f'{sender}:> {message}')
+            case _:
+                print("unserialized input.", msg)
 
     def send(self, data):
         msg = json.dumps(data) + "\n"

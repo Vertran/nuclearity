@@ -1,11 +1,12 @@
 import modules.instancer as instancer
+
 assert instancer.log is not None
 log = instancer.log
 
+import yaml
 from modules.instancer import OBJECT
 from modules.managers.submodules.objects import *
 
-import yaml
 
 class ObjectManager:
     def __init__(self):
@@ -13,6 +14,8 @@ class ObjectManager:
 
         self.draw_objects = []
         self.update_objects = []
+
+        self.styles =  {}
 
         instancer.managers["object"] = self
         log.info("Object Manager initialized successfully")
@@ -22,7 +25,10 @@ class ObjectManager:
         objs_u_tmp = []
         updatable = False
         with open(path, 'r', encoding='utf-8') as file:
-            menu_tree = yaml.safe_load(file)['structure']
+            data = yaml.safe_load(file)
+            menu_tree = data['structure']
+
+        self.styles = data.get('styles', {})
 
         #log.debug('\n', menu_tree)
 
@@ -31,6 +37,10 @@ class ObjectManager:
 
                 props = object.get('properties', {})
                 raw_type = props.get('type', 'rect')
+
+                
+                base = self.styles.get(props.pop('extends'), {})
+                object['properties'] = {**base, **props}
                 match raw_type:
                     case 'circle':
                         obj = RegularPolygon(**props)

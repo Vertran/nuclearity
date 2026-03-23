@@ -1,99 +1,112 @@
-import time
-import os
 import sys
-import glfw
+import threading
+import time
 
 import modules.instancer as instancer
 
-#==== <MODULES> ====#
-#===> [logger]
+# ==== <MODULES> ====#
+# ===> [logger]
 from modules.logger import Logger
+
 Logger()
 assert instancer.log is not None
 
 log = instancer.log
-i = 0
-while log is None:
-    if i > 3:
-        print('[ERROR] logger not initialized')
-        exit()
-    
-    print(f'[WARN] {i} waiting for logger initialization...')
-    i += 1
-    time.sleep(0.5)
 
 
-#===> [filer]
-from modules.filer import Filer
-Filer()
-assert instancer.filer is not None
+# ===> [life manager]
+from modules.managers.life_manager import LifeManager
 
-filer = instancer.filer
-i = 0
-while filer is None:
-    
-    if i > 3:
-        log.error('filer not initialized')
-        log.kill()
-        exit()
-
-    log.warn(f'{i} waiting for filer initialization...')
-    i += 1
-    time.sleep(0.5)
+LifeManager()
+assert instancer.managers["life"] is not None
+life_manager = instancer.managers["life"]
 
 
-#===> [console manager]
+# ===> [console manager]
 from modules.managers.console_manager import Console
+
 Console()
-assert instancer.managers['console'] is not None
-console_manager = instancer.managers['console']
+assert instancer.managers["console"] is not None
+console_manager = instancer.managers["console"]
 
-#==> [object manager]
+
+# ==> [object manager]
 from modules.managers.object_manager import ObjectManager
+
 ObjectManager()
-assert instancer.managers['object'] is not None
-object_manager = instancer.managers['object']
+assert instancer.managers["object"] is not None
+object_manager = instancer.managers["object"]
 
-#===> [video manager]
+
+# ===> [video manager]
 from modules.managers.video_manager import VideoManager
+
 VideoManager()
-assert instancer.managers['video'] is not None
-video_manager = instancer.managers['video']
+assert instancer.managers["video"] is not None
+video_manager = instancer.managers["video"]
 
-#===> [audio manager]
+
+# ===> [audio manager]
 from modules.managers.audio_manager import AudioManager
+
 AudioManager()
-assert instancer.managers['audio'] is not None
-audio_manager = instancer.managers['audio']
+assert instancer.managers["audio"] is not None
+audio_manager = instancer.managers["audio"]
 
-#===> [internet manager]
+
+# ===> [internet manager]
 from modules.managers.network_manager import NetworkManager
+
 NetworkManager()
-assert instancer.managers['network'] is not None
-network_manager = instancer.managers['network']
-
-#==== <PRE-MAIN> ====#
-field_nuclearity = filer.open_frames("data/other/fields.txt")
-if field_nuclearity is None:
-    log.warn('failed to load console label from file')
-    log.info('main.py first log. Welcome to: NUCLEARITY', "main label not loaded")
-else:
-    log.info('main.py first log. Welcome to:\n', field_nuclearity[0], offset=0)
+assert instancer.managers["network"] is not None
+network_manager = instancer.managers["network"]
 
 
-#===> [functions]
+# ==== <LIFE-CHECK> ====#
+# life_manager.life_check()
 
 
-#==== <MAIN> ====#
+# ==== <PRE-MAIN> ====#
+running = True
+
+
+# ===> [functions]
+def internet_main(argv):
+    while running:
+        uArg = input()
+
+        if uArg == "exit":
+            network_manager.disconnect()
+            exit()
+        else:
+            try:
+                network_manager.send({"type": "terminal_input", "message": uArg, "sender": f"Console-{argv[2]}"})
+            except Exception as e:
+                log.error('Network exception occured:', str(e))
+
+# ==== <MAIN> ====#
 def main():
-    log.info('Entering main loop')
-    video_manager.main()
+    #argv = sys.argv
+
+    time.sleep(2)
+    try:
+        log.info("Entering main loop")
+        #threading.Thread(target=network_manager.connect, daemon=True).start()
+
+        #threading.Thread(target=internet_main, args=[argv], daemon=True).start()
+
+        video_manager.main()
+    except Exception as e:
+        log.error("CLIENT ERROR:", str(e))
+        life_manager.fix_error(e)
+        input("Error occurred. Press Enter to close...")
 
 
+print("alala")
 main()
+input("Error occurred. Press Enter to close...")
 
-#==== <POST-MAIN> ====#
-log.info('Exiting program.')
+# ==== <POST-MAIN> ====#
+log.info("Exiting program.")
 
-filer.kill()
 log.kill()

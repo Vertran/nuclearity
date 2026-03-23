@@ -1,0 +1,28 @@
+[hardware]
+gpu = "KVIDIO PPU-780"
+cpu = "UTIL Penta g8-750U"
+ram = 256               #KiB
+rom = 64                #KiB
+
+[system.onload]
+#         "kernel", filesys,        ,,           ,             ,
+modules = "nucle,   fsys,     sensors,    cooling,    emergency,  scram"
+
+#===> MODULES PROPERTIES
+#> filesystem
+[fsys]
+dependencies = "nucle"
+hot_load = 0
+sys_required = 1
+
+[fsys.req]
+ram = 14                #KiB
+rom = 12                #KiB
+
+#> kernel
+[nucle]
+version = "3.28.4"      #val-X.Y.Z = mm.dd.revision
+dependencies = ""
+hot_load = 0
+sys_required = 1
+
