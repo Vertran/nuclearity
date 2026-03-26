@@ -6,3 +6,5 @@ __pycache__
 /client/modules/__pycache__
 /client/modules/managers/submodules/__pycache__
 nuclearity_vault/.obsidian/workspace.json
+server/modules/managers/submodules/__pycache__/buffers.cpython-314.pyc
+nuclearity_vault/.obsidian/workspace.json
