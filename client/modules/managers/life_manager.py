@@ -8,8 +8,8 @@ import inspect
 
 
 class LifeManager:
-
-    def __init__(self, config_path="data/health/default.txt") -> None:
+    @instancer.manager
+    def __init__(self, config_path="data/health/default.txt"):
         log.info("Initializing Life Manager")
         self.configs = self._load_configs(config_path)
         self.max_tries = 3
@@ -17,7 +17,6 @@ class LifeManager:
         self.known_errors = {}
 
         instancer.managers["life"] = self
-        log.info("Life Manager initialized successfully")
 
     def fix_error(self, e):
         fingerprint = f"{type(e).__name__}:{str(e)}"

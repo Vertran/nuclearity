@@ -1,8 +1,10 @@
 import modules.instancer as instancer
+
 assert instancer.log is not None
 log = instancer.log
 
 class AudioManager:
+    @instancer.manager
     def __init__(self):
         log.info("Initializing Audio Manager")
         self.audio_system = None

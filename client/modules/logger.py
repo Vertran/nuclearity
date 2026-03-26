@@ -17,33 +17,48 @@ class Logger:
 
         instancer.log = self
 
+        def init_decorator(func):
+            def wrapper(*args, **kwargs):
+                name = args[0].__class__.__name__
+
+                self.info(f'Initialising {name}', stack_offset=3)
+                result = func(*args, **kwargs)
+                self.info(f'{name} initialised successfully', stack_offset=3)
+                
+                return result
+            return wrapper
+
+        instancer.manager = init_decorator
+
         instancer.log.info("Logger initialized")
 
-    def info(self, text="", desc="", offset=4):
-        self._make_log("info", message=text, description=desc, offset=offset)
+    def info(self, text="", desc="", offset=4, stack_offset=2):
+        self._make_log("info", message=text, description=desc, offset=offset, stack_offset=stack_offset)
 
-    def debug(self, text="", desc="", offset=4):
-        self._make_log("debug", message=text, description=desc, offset=offset)
+    def debug(self, text="", desc="", offset=4, stack_offset=2):
+        self._make_log("debug", message=text, description=desc, offset=offset, stack_offset=stack_offset)
 
-    def warn(self, text="", desc="", offset=4):
-        self._make_log("warn", message=text, description=desc, offset=offset)
+    def warn(self, text="", desc="", offset=4, stack_offset=2):
+        self._make_log("warn", message=text, description=desc, offset=offset, stack_offset=stack_offset)
 
-    def error(self, text="", desc="", offset=4):
-        self._make_log("error", message=text, description=desc, offset=offset)
+    def error(self, text="", desc="", offset=4, stack_offset=2):
+        self._make_log("error", message=text, description=desc, offset=offset, stack_offset=stack_offset)
 
-    def on_kill(self, text="The last message", desc="", offset=4):
-        self._make_log("kill", message=text, description=desc, offset=offset)
+    def on_kill(self, text="The last message", desc="", offset=4, stack_offset=2):
+        self._make_log("kill", message=text, description=desc, offset=offset, stack_offset=stack_offset)
 
-    def custom(self, text='', desc='', formula='', offset=4):
-        self._make_log("kill", message=text, description=desc, formula=formula, offset=offset)
+    def custom(self, text='', desc='', formula='', offset=4, stack_offset=2):
+        self._make_log("kill", message=text, description=desc, formula=formula, offset=offset, stack_offset=stack_offset)
 
     def get_session_logs(self):
         return self.session_logs
 
-    def _make_log(self, level="DEBUG", message="Debug", description=None, timestamp=None, formula=None, offset=4):
+    def _make_log(self, level="DEBUG", message="Debug", description=None, timestamp=None, formula=None, offset=4, stack_offset=2):
         stack = inspect.stack()
 
-        caller_frame = stack[2]
+        print(stack)
+
+        caller_frame = stack[stack_offset]
         module = os.path.basename(caller_frame.filename)
 
         if timestamp is None:
@@ -55,7 +70,7 @@ class Logger:
                 log_entry = f"Error occured while making this log entry (that's ironic lol): {formula}"
                 description = str(e)
         else:
-            log_entry = f"\n[{timestamp}] [{module:^11}] [CLIENT] [{level.upper():^6}] {message}"
+            log_entry = f"\n[{timestamp}] [{module:^11}] [{level.upper():^6}] {message}"
 
         if description:
             log_entry += "\n" + " " * offset + f"{description}\n"

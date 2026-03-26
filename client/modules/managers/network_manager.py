@@ -11,8 +11,8 @@ import threading
 
 
 class NetworkManager:
+    @instancer.manager
     def __init__(self, host="localhost", port=9000):
-        log.info("Initializing Network Manager")
 
         self.host = host
         self.port = port
@@ -20,7 +20,6 @@ class NetworkManager:
         self.running = False
 
         instancer.managers["network"] = self
-        log.info("Network Manager initialized successfully")
 
     def connect(self):
         try:

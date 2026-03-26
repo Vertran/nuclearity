@@ -9,8 +9,8 @@ from modules.managers.submodules.objects import *
 
 
 class ObjectManager:
+    @instancer.manager
     def __init__(self):
-        log.info("Initializing Object Manager")
 
         self.draw_objects = []
         self.update_objects = []
@@ -18,7 +18,6 @@ class ObjectManager:
         self.styles =  {}
 
         instancer.managers["object"] = self
-        log.info("Object Manager initialized successfully")
 
     def create_from_file(self, path):
         objs_d_tmp = []

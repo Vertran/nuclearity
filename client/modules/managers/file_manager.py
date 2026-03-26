@@ -5,8 +5,8 @@ log = instancer.log
 
 
 class FileManager:
-    def __init__(self) -> None:
-        log.info("Initializing File Manager")
+    @instancer.manager
+    def __init__(self):
         self.opened_files = []
         #{
         #    "pid":          None,
@@ -17,7 +17,6 @@ class FileManager:
         #}
 
         instancer.managers["file"] = self
-        log.info("FIle Manager initialized successfully")
 
     def open_file(self, path=''):
         try:

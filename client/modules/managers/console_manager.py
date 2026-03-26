@@ -9,8 +9,8 @@ from modules.managers.submodules.buffers import Buffer
 
 
 class Console:
+    @instancer.manager
     def __init__(self):
-        log.info("Initializing console manager")
 
         #==> sys
         self.mode = 'sui' #SimpleUI|NoUI|GraphicsUI
@@ -22,7 +22,6 @@ class Console:
 
         #==> finish
         instancer.managers["console"] = self
-        log.info("Console manager initialized")
 
     def draw(self):
         pass

@@ -17,10 +17,9 @@ from OpenGL.GL import *
 
 
 class VideoManager:
+    @instancer.manager
     def __init__(self):
-
         # ==> base
-        log.info("Initializing Video Manager")
         self.screen = None
         self.clock = None
 
@@ -79,7 +78,6 @@ class VideoManager:
 
         # ==> post
         instancer.managers["video"] = self
-        log.info("Video Manager initialized successfully")
 
     def create_program(self, folder_path, vert_shader, frag_shader):
         def compile_shader(source, shader_type):

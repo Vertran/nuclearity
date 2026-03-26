@@ -4,6 +4,7 @@ assert instancer.log is not None
 log = instancer.log
 
 class NucleOS():
+    @instancer.manager
     def __init__(self, **kwargs):
         self.configiration = self._get_config('data/settings/os.toml')
         self.filesystem = {}
@@ -54,7 +55,6 @@ class NucleOS():
                 file_data = struct.unpack(f'{size}s', data[offset:offset+size])
                 offset += size
 
-                self.filesystem
 
         else:
             log.error(f'FIle `{path.split('/')[-1]}` is not a NtVS file originally.')

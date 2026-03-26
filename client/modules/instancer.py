@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Callable
 
 if TYPE_CHECKING:
     from modules.logger import Logger
@@ -52,3 +52,5 @@ def life(func):
                 return func(self, *args, **kwargs)
             except Exception as e:
                 log.error('Error not fixed: ', e) #type: ignore
+
+manager: Callable[..., Any] = None #type: ignore
