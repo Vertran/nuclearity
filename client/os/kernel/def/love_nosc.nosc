@@ -1,0 +1,11 @@
+hii <- "Hello world from `NUCLEARITY OS Code!`"
+lalala <- "ОНО РАБОТАЕТТТ"
+
+valuee <- 4
+
+while valuee < 14
+    valuee <- valuee + 1
+    outl(valuee)
+
+outl(hii)
+outl(lalala)

@@ -7,59 +7,9 @@ class NucleOS():
     @instancer.manager
     def __init__(self, **kwargs):
         self.configiration = self._get_config('data/settings/os.toml')
-        self.filesystem = {}
+        self.filesystem = Filesystem.load('data/disk.ntvs')
 
-#   === STRUCTURE ===
-
-#       4.Bytes                         4.Bytes                         4.Bytes
-#       magic               +           version             +           psize
-#       NtVS                               1                               20
-
-#       16.Bytes                        4.Bytes
-#       filename            +             size
-#       'virtual.file'                     40
-
-#       4.Bytes
-#       pathlen             +             path
-#       32                         'path/to/virtual.file'
-
-#       N.Bytes
-#       data
-#       'alalala'
-
-
-
-    def open_NtVS_image(self, path):
-        import struct
-
-        offset = 0
-
-        with open(path, 'rb') as f:
-            data = f.read()
-        magic, version = struct.unpack('4sH', data[:6])
-
-        if magic == b'NtVS':
-            while offset <= len(data):
-                #=> name|size
-                name, size = struct.unpack('16sI', data[offset:offset+20])
-                offset += 20
-
-                #=> pathlen|path
-                path_len, = struct.unpack('I', data[offset:offset+4])
-                offset += 4
-
-                path = data[offset:offset+path_len].decode('utf-8')
-                offset += path_len
-
-                #=> data
-                file_data = struct.unpack(f'{size}s', data[offset:offset+size])
-                offset += size
-
-
-        else:
-            log.error(f'FIle `{path.split('/')[-1]}` is not a NtVS file originally.')
-
-        
+        instancer.managers['virt_os'] = self
 
 
     def _get_config(self, path):

@@ -1,0 +1,11 @@
+//nucle.nosc
+module_list <- file(f"../config/os.toml")["system"]["onload"]["modules"] //Import module list from file
+
+each module_name in module_list
+    modget "../modules/"+module_name
+
+run <- true
+
+while run
+    outl("Hello World!")
+    run <- false
