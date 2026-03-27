@@ -1,4 +1,5 @@
 import modules.instancer as instancer
+import nos.modules.instancer as osi
 
 assert instancer.log is not None
 log = instancer.log
@@ -12,6 +13,8 @@ class Filesystem:
 
     def __init__(self):
         self.root = Filesystem.FSNode('/', is_file=False)
+
+        osi.fs = self
 
 
     class FSNode:

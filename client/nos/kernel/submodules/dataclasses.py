@@ -14,6 +14,11 @@ class BinOp:
     right: Any
 
 @dataclass
+class If:
+    condition: Any
+    body: list
+
+@dataclass
 class Name:
     value: str
 

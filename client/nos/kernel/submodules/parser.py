@@ -73,6 +73,13 @@ class Parser:
             path = self.parse_expr()
             return Call(func='modget', args=[path])
 
+
+        elif tok == ('KEYWORD', 'if'):
+            self.consume()
+            cond = self.parse_expr()
+            body = self.parse_block()
+            return If(condition=cond, body=body)
+
         elif tok[0] == 'KEYWORD':
             self.consume()
             return Name(tok[1])
@@ -87,8 +94,10 @@ class Parser:
 
     def parse_expr(self):
         left = self.parse_primary()
+
+
         
-        while self.peek() and self.peek()[0] == 'OP' and self.peek()[1] in ('+', '-', '<', '>', '=='):
+        while (self.peek() and (self.peek()[0] == 'OP' and self.peek()[1] in ('+', '-', '<', '>')) or self.peek()[0] == 'EQ'):
             op = self.consume()[1]
             right = self.parse_primary()
             left = BinOp(op=op, left=left, right=right)

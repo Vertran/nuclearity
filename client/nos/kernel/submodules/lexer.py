@@ -11,6 +11,7 @@ class Lexer:
         ("NUMBER",      r'\d+'),
         ('ASSIGN',      r'<-'),
         ('STRING',      r'"[^"]*"'),
+        ('EQ',          r'=='),
         ('OP',          r'[+\-*/<>().\[\]"\':]'),
         ('NEWLINE',     r'\n'),
         ('INDENT',      r'^( {4})+'),
@@ -18,7 +19,7 @@ class Lexer:
     ]
 
     #==> keywords
-    KEYWORDS = {'each', 'in', 'while', 'modget', 'true', 'false'}
+    KEYWORDS = {'each', 'in', 'while', 'modget', 'true', 'false', 'if'}
 
     #==> binary open
     def open_NOSC_b(self, file_path):

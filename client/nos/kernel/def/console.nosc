@@ -1,0 +1,25 @@
+
+
+run <- true
+user <- "$:> "
+dir <- "/"
+
+action <- ""
+
+while run
+    uArg <- input(dir + user)
+
+    if uArg == "exit"
+        outl("Good bye!")
+        run <- false
+
+    if uArg == "file"
+        action <- input("Action? ")
+        path <- input("Path? ")
+
+        if action == "create"
+            outl("not yet, mate :>")
+            
+        if action == "read"
+            ff <- file(path)
+            outl(ff)
