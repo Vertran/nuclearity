@@ -62,6 +62,13 @@ assert instancer.managers["network"] is not None
 network_manager = instancer.managers["network"]
 
 
+# ===> [virtual OS manager]
+from modules.managers.virt_os_manager import NucleOS
+
+NucleOS()
+assert instancer.managers["virt_os"] is not None
+virt_os_manager = instancer.managers["virt_os"]
+
 # ==== <LIFE-CHECK> ====#
 # life_manager.life_check()
 
@@ -95,7 +102,9 @@ def main():
 
         #threading.Thread(target=internet_main, args=[argv], daemon=True).start()
 
-        video_manager.main()
+        virt_os_manager.boot()
+
+        #video_manager.main()
     except Exception as e:
         log.error("CLIENT ERROR:", str(e))
         life_manager.fix_error(e)
