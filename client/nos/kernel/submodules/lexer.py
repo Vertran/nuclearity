@@ -16,10 +16,11 @@ class Lexer:
         ('NEWLINE',     r'\n'),
         ('INDENT',      r'^( {4})+'),
         ('SKIP',        r'[ ]+'),
+        ('EMPTY',       r'^\s*$')
     ]
 
     #==> keywords
-    KEYWORDS = {'each', 'in', 'while', 'modget', 'true', 'false', 'if'}
+    KEYWORDS = {'each', 'in', 'while', 'modget', 'true', 'false', 'if', 'NaN'}
 
     #==> binary open
     def open_NOSC_b(self, file_path):
@@ -29,47 +30,52 @@ class Lexer:
             _file = f.read()
 
             #=> magic
-            magic = struct.unpack('4sI', _file[:4])
-            offset += 4
+            #magic = struct.unpack('4sI', _file[:4])
+            #offset += 4
             
-            if magic != b'nOSc':
-                print('not a .nosc file!')
-                return
+            #if magic != b'nOSc':
+            #    print('not a .nosc file!')
+            #    return
                 
             #=> header
-            code_len, desc_len, img_len = struct.unpack('4sI', _file[offset:offset+8])
-            offset += 8
+            #code_len, desc_len, img_len = struct.unpack('4sI', _file[offset:offset+8])
+            #offset += 8
 
             #=> body.code
-            code = struct.unpack(f'{code_len}s', _file[offset:offset+code_len])
-            offset += code_len
+            #code = struct.unpack(f'{code_len}s', _file[offset:offset+code_len])
+            #offset += code_len
 
             #=> body.desc
-            descriprion = _file[offset:offset+desc_len]
-            offset += desc_len
+            #descriprion = _file[offset:offset+desc_len]
+            #offset += desc_len
 
             #=> body.icon
-            image = _file[offset:offset+img_len]
+            #image = _file[offset:offset+img_len]
 
-            return {
-                "name": file_path.split('/')[-1][:6],
-                "description": descriprion,
-                "code": code,
-                "icon": image,
-            }
+            #return {
+            #    "name": file_path.split('/')[-1][:6],
+            #    "description": descriprion,
+            #    "code": code,
+            #    "icon": image,
+            #}
+            return _file.decode('utf-8')
 
 
     def open_NOSC(self, file_path):
         with open(file_path, 'r', encoding='utf-8') as f:
             return f.read()
 
-    def start(self, file_path: str):
-        try:
-            code = self.open_NOSC_b(file_path)['code']
-        except:
-            code = self.open_NOSC(file_path)
+    def start(self, text: str):
+        #try:
+        #    log.info('Interpreting from binary')
+        #    code = self.open_NOSC_b(file_path)#['code']
+        #except AttributeError:
+        #    log.info('Interpreting from opened file')
+        #    code = self.open_NOSC(file_path)
 
-        stack = [0]
+        code = text
+
+        #stack = [0]
         tokens = []
 
         tok_regex = re.compile(
@@ -83,12 +89,18 @@ class Lexer:
             kind = match.lastgroup
             value = match.group()
 
-            if kind == 'SKIP':
+            if kind in ('SKIP', 'EMPTY'):
                 continue
 
             if kind == 'NAME' and value in self.KEYWORDS:
                 kind = 'KEYWORD'
 
+            if kind == 'INDENT':
+                level = len(value) // 4
+                tokens.append(('INDENT', level))
+                continue
+
             tokens.append((kind, value))
+
 
         return tokens

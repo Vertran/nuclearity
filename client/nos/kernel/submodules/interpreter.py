@@ -4,26 +4,18 @@ from nos.modules import instancer as osi
 
 class Interpreter:
     def __init__(self):
+        self.fs = osi.fs
         self.env = {}
         self.builtins = {
             'outl':         lambda *args:           print(*args),
-            'file':         lambda path:            self._file_builtin(path),
+            'mkdir':        lambda path:            self.fs.create(path, is_file=False),
+            'mkfile':       lambda path:            self.fs.create(path, is_file=True),
+            'fdir':         lambda path:            True if self.fs.get(path) is not None else False,
             'modget':       lambda path:            None,
             'input':        lambda prompt='':       input(prompt).strip(),
             'ls':           lambda path='/':        self._ls(path),
             'cat':          lambda path:            self._cat(path),
         }
-        self.fs = osi.fs
-
-    def _file_builtin(self, path):
-        if self.fs is None:
-            log.error('No filesystem')
-            return
-        node = self.fs.get(path)
-        if node is None:
-            return {}
-        import tomllib
-        return tomllib.loads(node.data.decode('utf-8'))
 
     def run(self, statements):
         for node in statements:

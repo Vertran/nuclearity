@@ -65,7 +65,7 @@ network_manager = instancer.managers["network"]
 # ===> [virtual OS manager]
 from modules.managers.virt_os_manager import NucleOS
 
-NucleOS()
+NucleOS(is_debug=False)
 assert instancer.managers["virt_os"] is not None
 virt_os_manager = instancer.managers["virt_os"]
 
@@ -95,7 +95,7 @@ def internet_main(argv):
 def main():
     #argv = sys.argv
 
-    time.sleep(2)
+    #time.sleep(2)
     try:
         log.info("Entering main loop")
         #threading.Thread(target=network_manager.connect, daemon=True).start()

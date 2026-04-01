@@ -1,3 +1,4 @@
+import dataclasses
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -21,6 +22,10 @@ class If:
 @dataclass
 class Name:
     value: str
+
+@dataclass
+class NaN:
+    value: None
 
 @dataclass
 class Literal:

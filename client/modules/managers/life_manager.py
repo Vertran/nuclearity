@@ -10,7 +10,6 @@ import inspect
 class LifeManager:
     @instancer.manager
     def __init__(self, config_path="data/health/default.txt"):
-        log.info("Initializing Life Manager")
         self.configs = self._load_configs(config_path)
         self.max_tries = 3
         self.retry_after = 3

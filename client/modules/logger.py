@@ -1,6 +1,7 @@
 import inspect
 import os
 import time
+from datetime import datetime
 
 import modules.instancer as instancer
 
@@ -96,7 +97,9 @@ class Logger:
 
 
         if timestamp is None:
-            timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            now = datetime.now()
+            ms = now.strftime("%f")[:2]
+            timestamp = time.strftime(f"%Y-%m-%d %H:%M:%S.{ms}", time.localtime())
         
         log_entry = f"\n[{timestamp}] [{module:^11}] [{level.upper():^6}] {message}"
 

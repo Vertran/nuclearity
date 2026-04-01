@@ -25,9 +25,10 @@ class Parser:
             node = self.parse_statement()
             if node is not None:
                 statements.append(node)
+
         return statements
 
-    def parse_statement(self):
+    def parse_statement(self, level=0):
         while self.peek() and self.peek()[0] == 'NEWLINE':
             self.consume()
 
@@ -45,9 +46,11 @@ class Parser:
 
             if self.peek() and self.peek() == ('OP', '('):
                 self.consume()
+                print(self.peek())
                 args = []
                 while self.peek() != ('OP', ')'):
                     args.append(self.parse_expr())
+
                 self.consume()
                 return Call(func=name, args=args)
             return Name(name)
@@ -56,16 +59,16 @@ class Parser:
         elif tok == ('KEYWORD', 'while'):
             self.consume()
             cond = self.parse_expr()
-            body = self.parse_block()
+            body = self.parse_block(level + 1)
             return While(condition=cond, body=body)
 
         # each x in y
         elif tok == ('KEYWORD', 'each'):
             self.consume()
             var = self.consume('NAME')[1]
-            self.consume()  # 'in'
+            self.consume()
             iterable = self.parse_expr()
-            body = self.parse_block()
+            body = self.parse_block(level + 1)
             return Each(var=var, iterable=iterable, body=body)
 
         elif tok == ('KEYWORD', 'modget'):
@@ -77,14 +80,13 @@ class Parser:
         elif tok == ('KEYWORD', 'if'):
             self.consume()
             cond = self.parse_expr()
-            body = self.parse_block()
+            body = self.parse_block(level + 1)
             return If(condition=cond, body=body)
 
         elif tok[0] == 'KEYWORD':
             self.consume()
             return Name(tok[1])
 
-        # просто вызов функции: outl("Hello!")
         elif tok[0] == 'NAME':
             return self.parse_expr()
 
@@ -129,7 +131,6 @@ class Parser:
 
         elif tok[0] == 'NAME':
             name = self.consume()[1]
-            # вызов функции?
             if self.peek() and self.peek() == ('OP', '('):
                 self.consume()  # (
                 args = []
@@ -139,15 +140,17 @@ class Parser:
                 return Call(func=name, args=args)
             return Name(name)
 
-    def parse_block(self):
+    def parse_block(self, level=1):
         body = []
         while self.peek() is not None:
             while self.peek() and self.peek()[0] == 'NEWLINE':
                 self.consume()
             if not self.peek() or self.peek()[0] != 'INDENT':
                 break
+            if self.peek()[1] != level:
+                break
             self.consume('INDENT')
-            stmt = self.parse_statement()
+            stmt = self.parse_statement(level)
             if stmt:
                 body.append(stmt)
         return body
