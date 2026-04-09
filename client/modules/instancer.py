@@ -7,6 +7,7 @@ if TYPE_CHECKING:
 log: "Logger | None" = None
 
 managers: dict = {
+    "game":         None,
     "video":        None,
     "audio":        None,
     "internet":     None,
@@ -54,3 +55,26 @@ def life(func):
                 log.error('Error not fixed: ', e) #type: ignore
 
 manager: Callable[..., Any] = None #type: ignore
+
+class INIT:
+    FULL = [
+        'logger',
+        #'file',
+        'life',
+        'console',
+        'object',
+        'video',
+        'audio',
+        'network',
+        'virtOS',
+        ]
+    LOG = ['logger']
+    #FILES = [
+        #'logger',
+        #'file',
+        #]
+    CONSOLE = [
+        'logger',
+        #'file',
+        'console',
+        ]

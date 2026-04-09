@@ -1,4 +1,4 @@
-from .dataclasses import *
+from ..dataclasses import *
 
 
 class Parser:

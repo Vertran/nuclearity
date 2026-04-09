@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import modules.instancer as instancer
 
 assert instancer.log is not None
@@ -10,6 +12,7 @@ class FileManager:
         self.opened_files = []
         #{
         #    "pid":          None,
+        #    "timestamp":    None,
         #    "name":         "",
         #    "path":         "",
         #    "raw_cont":     None,
@@ -18,22 +21,29 @@ class FileManager:
 
         instancer.managers["file"] = self
 
-    def open_file(self, path=''):
-        try:
-            with open(path, 'r', encoding='utf-8') as f:
-                data = f.read()
+    def open(self, path, mode='r', encoding='utf-8'):
+        if 'b' in mode:
+            f = open(path, mode)
+        else:
+            f = open(path, mode, encoding=encoding)
 
-            self.__add_opened(data)
-            return data
-        except Exception as e:
-            log.error(f'Exception occured while opening the `{path}`:', str(e))
+        self.opened_files.append({
+            "timestamp":    datetime.now(),
+            "path":         path,
+            "handle":       f,
+            "lock":         True,
+        })
+        return f
 
-
-    def __add_opened(self, data):
-        self.opened_files.append
+    def close(self, path):
+        self.opened_files[path]["handle"].close()
+        del self.opened_files[path]
 
     def kill(self, is_check=False):
         if not is_check:
             log.on_kill('Killing File Manager')
+
+            for file in self.opened_files:
+                self.close(file['path'])
 
             self.opened_files.clear()
