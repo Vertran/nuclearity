@@ -1,0 +1,35 @@
+
+
+run <- true
+user <- "$:> "
+dir <- "/"
+
+
+while run
+    uArg <- input(dir + user)
+    if uArg == "exit"
+        outl("Good bye!")
+        run <- false
+    if uArg == "mkfile"
+        path <- input("|Path> ")
+        result <- mkfile(path)
+        if result
+            outl("success")
+    if uArg == "mkdir"
+        path <- input("|Path> ")
+        result <- mkdir(path)
+        if result:
+            outl("success")
+    if uArg == "cat"
+        path <- input("|Path> ")
+        data <- cat(path)
+        outl(data)
+    if uArg == "cd"
+        path <- input("|Path> ")
+        if path == ".."
+            dir <- "/"
+            path <- "/"
+        if fdir(path)
+            dir <- path
+    if uArg == "ls"
+        ls(dir)
