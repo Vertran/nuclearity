@@ -1,0 +1,38 @@
+┌———————————————————————————————————————————————————————————————————————————————————┐
+│\                                                                                 /│
+│>  ooooo      ooo                       oooo              .oooooo.    .oooooo..o  <│
+│>  `888b.     `8'                       `888             d8P'  `Y8b  d8P'    `Y8  <│
+│>   8 `88b.    8  oooo  oooo   .ooooo.   888   .ooooo.  888      888 Y88bo.       <│
+│>   8   `88b.  8  `888  `888  d88' `"Y8  888  d88' `88b 888      888  `"Y8888o.   <│
+│>   8     `88b.8   888   888  888        888  888ooo888 888      888      `"Y88b  <│
+│>   8       `888   888   888  888   .o8  888  888    .o `88b    d88' oo     .d8P  <│
+│>  o8o        `8   `V88V"V8P' `Y8bod8P' o888o `Y8bod8P'  `Y8bood8P'  8""88888P'   <│
+│/                                                                                 \│
+├—————————————————————————————————————————————┬—————————————————————————————————————┤
+│     <\ Nuclearity, Operating System. \>     │ "The Guide"; The "Operating System" │
+├—————————————————————————————————————————————┴—————————————————————————————————————┤
+│ <# Every Operating SYstem is alive once created. So do not try to hurt it if you  │
+│    dare to face the consequences. #> Still and yet, Unknownn for me Author        │
+└———————————————————————————————————————————————————————————————————————————————————┘
+
+Welkome home, Developer!
+
+
+I waited for you to come here..
+So, what is it "Operating System"? Magic machine that's doing some magic stuff?
+I think no. At least, I'll explain how mine works.
+
+You'll have plenty of space to play with it. For this I made it structured. Every
+module is important.
+
+Firstly, NOS (NucleOS) is not a one file. It's structure created from small
+different objects.
+And by "Objects" I mean the objects of classes.
+
+You can find the docs for every part in the `The Guide/nuclearity.os/` folder.
+I'll leave other mails for you too.
+
+
+Good Luck,
+The Unknown
+

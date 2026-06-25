@@ -1,0 +1,69 @@
+┌———————————————————————————————————————————————————————————————————————————┐
+│   ooooo      ooo ooooooooooooo oooooo     oooo oooooooooooo  .oooooo..o   │
+│   `888b.     `8' 8'   888   `8  `888.     .8'  `888'     `8 d8P'    `Y8   │
+│    8 `88b.    8       888        `888.   .8'    888         Y88bo.        │
+│    8   `88b.  8       888         `888. .8'     888oooo8     `"Y8888o.    │
+│    8     `88b.8       888          `888.8'      888    "         `"Y88b   │
+│    8       `888       888           `888'       888         oo     .d8P   │
+│   o8o        `8      o888o           `8'       o888o        8""88888P'    │
+├—————————————————————————————————————————————┬—————————————————————————————┤
+│  <\ Nuclearity, The Virtual FileSystem. \>  │"The Guide"; The "FileSystem"│
+├—————————————————————————————————————————————┴—————————————————————————————┤
+│ <# Once you understand the FileSystem, It'll give you even more than you  │
+│ could think it'll give by understanding it #> Yet, Unknownn for me Author │
+└———————————————————————————————————————————————————————————————————————————┘
+
+
+
+|======================================================================|
+|>                               GROUP                  TOTAL_SIZE    <|
+|——————————————————————————————————————————————————————————————————————|———————————————|   
+|                  |                               |                   |               |
+|      NAME        |          DESCRIPTION          |       SIZE        | #  DATATYPE   |   |======[  TOPIC  ]======|
+|                  |                               |                   | ^(fmt symbol) |———| Remark for this topic |
+|======================================================================|===============|   |=======================|
+
+
+
+|======================================================================|   ! LITTLE !
+|>                              HEADER                   12 bytes     <|   ! ENDIAN !      |======[ DT size ]======|
+|——————————————————————————————————————————————————————————————————————|———————————————| ┌—| Entire DataTable size |
+|                  |                               |                   |               | │ |=======================|
+|      MAGIC       | NUFS |  NuclearityFileSystem  |      4 bytes      | s    CHAR     | │ 
+|  datatable_size  | Size of the entire DATATABLE  |      8 bytes      | L  ULONG INT  |—┘ |======[ SEC_SIZE ]======|
+|                  |                               |                   |               |   | Size of individual     |
+|=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-|-=-=-=-=-=-=-=-| ┌—| data sector containing |
+|>                        DATA_TABLE_SECTOR              16+ bytes    <|                 │ | file-related data.     |
+|——————————————————————————————————————————————————————————————————————|———————————————| │ |========================|  |======[ FILE PATH ]=====|
+|                  |                               |                   |               | │                             | Theoretical position   |
+|   sector_size    |       Sector Size data        |      4 bytes      | I   U INT     |—┘ |======[ FILE ID ]======| ┌—| of the file after the  |
+|    id_offset     |     File ID sector offset     |      2 bytes      | H  USHORT INT |   | SHA-xxx generated ID  | │ | reconstruction of FS.  |
+|     file_id      |      File ID sector data      |   set by offset   | s     CHAR    |———| using the full path   | │ |========================|
+| file_path_offset |    File path sector offset    |      2 bytes      | H  USHORT INT |—┐ | and file content    ;)| │
+|    file_path     | File path used to recreate FS |   set by offset   | s     CHAR    | │ |=======================| │ |======[ LOCATION ]======|
+|  location_offset |  File location sector offset  |      2 bytes      | H  USHORT INT | └———————————————————————————┘ | File location, based   |
+|     location     |   Actual file location data   |   set by offset   | L  ULONG INT  |———————————————————————————————| on byte offset from    |
+| metadata_offset  |  Offset of te metadata block  |      4 bytes      | I    U INT    |                               | the end of the file    |
+|     metadata     |     Metadata block itself     |   set by offset   | s     CHAR    |—┐ |======[ METADATA ]======|  |========================|
+|                  |                               |                   |               | │ | Metadata represents a  |
+|=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-|-=-=-=-=-=-=-=-| └—| JSON dictionary with   |
+|>                           DATA_BLOCKS                 8+ bytes     <|                   | any data in it.        |
+|——————————————————————————————————————————————————————————————————————|———————————————|   |========================|
+|                  |                               |                   |               |
+|   data_offset    |       Data block offset       |      8 bytes      | L  ULONG INT  |
+|       data       |        Data block data        |   set by offset   | —  RAW BYTES  |
+|                  |                               |                   |               |
+|======================================================================|===============|
+
+
+
+A|                                                                                              
+N|   [HEADER]                                                                                   
+ |     ┌┴┬———   DATA TABLE   ————┬————   UNUSED SPACE   ————┬———————   DATA BLOCKS**  ———————┐
+E|     ┌—┬———————————————————————┬——————————————————————————┬————————————————————————————————┐
+X|     │❚│❚❘❚❚❘❚❚❚❚❚❘❚❚❚❚❚❚❚❚❘❚❚❚│                          │❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚│
+A|     └—┴———————————————————————┴——————————————————————————┴————————————————————————————————┘
+M|                  └ TABLE* ┘                                                                
+P|                    SECTOR      ┌—— * ———————————————————┐ ┌—— ** ————————————————————————┐
+L|                                │ sector can be any size │ │    built from 4kB sectors    │
+E|                                └————————————————————————┘ └——————————————————————————————┘
