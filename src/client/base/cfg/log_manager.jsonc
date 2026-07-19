@@ -1,0 +1,7 @@
+{
+    "filename-fmt": "%Y-%m-%d %H:%M:%S",
+    "output": ".logs/client/",
+    "split-files": false,
+    "split-postfix": "__pt",
+    "split-len": 0 //to work, requires split-files to be true
+}
