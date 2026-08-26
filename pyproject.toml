@@ -1,3 +1,0 @@
-[tool.ruff]
-ignore = ["E402", "F405", "F403"]
-line-length = 200
