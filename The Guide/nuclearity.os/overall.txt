@@ -11,8 +11,8 @@
 ├—————————————————————————————————————————————┬—————————————————————————————————————┤
 │     <\ Nuclearity, Operating System. \>     │ "The Guide"; The "Operating System" │
 ├—————————————————————————————————————————————┴—————————————————————————————————————┤
-│ <# Every Operating SYstem is alive once created. So do not try to hurt it if you  │
-│    dare to face the consequences. #> Still and yet, Unknownn for me Author        │
+│ <# Every Operating System is alive once created. So do not try to hurt it if you  │
+│    dare to face the consequences. #> Still and yet, Unknownn for me Author.       │
 └———————————————————————————————————————————————————————————————————————————————————┘
 
 Welkome home, Developer!
@@ -35,4 +35,3 @@ I'll leave other mails for you too.
 
 Good Luck,
 The Unknown
-

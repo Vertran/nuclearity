@@ -1,0 +1,20 @@
+┌———————————————————————————————————————————————————————————————————————————————┐
+│\                                                                             /│
+│>    .oooooo.             oooo  oooo                            .             <│
+│>   d8P'  `Y8b            `888  `888                          .o8             <│
+│>  888           .oooo.    888   888   .ooooo.  oooo  oooo  .o888oo  .oooo.o  <│
+│>  888          `P  )88b   888   888  d88' `88b `888  `888    888   d88(  "8  <│
+│>  888           .oP"888   888   888  888   888  888   888    888   `"Y88b.   <│
+│>  `88b    ooo  d8(  888   888   888  888   888  888   888    888 . o.  )88b  <│
+│>   `Y8bood8P'  `Y888""8o o888o o888o `Y8bod8P'  `V88V"V8P'   "888" 8""888P'  <│
+│/                                                                             \│
+├—————————————————————————————————————————————┬—————————————————————————————————┤
+│        <\ NucleOS, The Callouts. \>         │     "The Guide"; The "API"      │
+├—————————————————————————————————————————————┴—————————————————————————————————┤
+│ <# Once you understand the FileSystem, It'll give you even more than you      │
+│ could think it'll give by understanding it #> Yet, Unknownn for me Author     │
+└———————————————————————————————————————————————————————————————————————————————┘
+
+
+There are few API commands that OS can send to ALL applications (or specific app).
+Here is the table.

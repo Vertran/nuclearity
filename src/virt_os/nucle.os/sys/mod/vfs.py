@@ -1,19 +1,31 @@
 # NTVFS — See related docs at docs/nucle.os/files/ntvfs.md
 
+from concurrent.interpreters import create
 import struct
 
+class FilesystemAPI:
+    def __init__(self, fs: FileSystem):
+        self._fs = fs
 
+    def find(self, target: str):
+        pass
+
+    def make_file(self, path: str):
+        self._fs._create_from_path(path)
 
 class FileSystem:
     MAGIC = b'NUFS'
     def __init__(self):
-        self.root = FileSystem.FSNode('/', is_file=False)
-
+        self._root = FileSystem.FSNode('/', is_file=False)
+        self._options = {}
+        self.api_call = FilesystemAPI(self)
 
     class FSNode:
-        def __init__(self, name, is_file=False):
+        def __init__(self, name, is_deleted=False, is_hidden=False, is_file=False):
             self.name:      str         = name
             self.is_file:   bool        = is_file
+            self.is_deleted:bool        = is_deleted
+            self.is_hidden: bool        = is_hidden
             self.children:  dict        = {}
             self.path:      str         = ""
             self.link:      str|None    = None
@@ -21,19 +33,17 @@ class FileSystem:
             self.location:  bytes|None  = None
 
 
-    def create_from_path(self, path: str):
-        if not isinstance(self.root, FileSystem.FSNode):
-            self.root = FileSystem.FSNode('/', is_file=False)
 
+    def _create_from_path(self, path: str):
         spath = path.split('/')
 
-        node = self.root
+        node = self._root
 
         for part in spath:
             if part not in node.children:
                 node.children[part] = FileSystem.FSNode(part)
 
-            
+
 
     def _reconstruct_fs(self, path_to_ntvfs):
         def read_dt_sector(data):
@@ -75,16 +85,20 @@ class FileSystem:
                 while f.tell() < data_table_size + 8:
                     data_table.append(read_dt_sector(f))
 
-            node = FileSystem.FSNode('/', is_file=False)
-
             for sector in data_table:
-                spath = sector['file_path'].split('/')
-
-                for part in spath:
-                    if part not in node.children:
-                        node.children[part] = FileSystem.FSNode('/', is_file=False)
+                self._create_from_path(sector["file_path"])
 
 
 
         except Exception as e:
             print(e)
+
+    def copy_filesystem_drive(self, origin_path: str, target_path: str, IS_OVERWRITE_ALLOWED: bool = False):
+        if IS_OVERWRITE_ALLOWED and self._options["FS_ACTIONS"]["OVERWRITE_REQUESTED__AND_YOURE_REALLY_SHURE_ABT_THIS"]:
+            try:
+                import shutil
+
+                shutil.copy2(origin_path, target_path)
+
+            except Exception as e:
+                print("Thank The God, cuz I'm not overwriting your FS bro.\n", str(e))
